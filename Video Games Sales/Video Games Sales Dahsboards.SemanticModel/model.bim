@@ -1,0 +1,413 @@
+{
+  "compatibilityLevel": 1550,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.137.952.0 (24.10)"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"Video Games Sales\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "es-CO",
+    "cultures": [
+      {
+        "name": "es-CO",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "Video Games Sales",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navegación"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Editorial",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b4f1da81-eff3-4d44-a6bd-9bf274510118",
+            "sourceColumn": "Editorial",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f1310670-4b67-4a62-809c-4278ccfe4907",
+            "sourceColumn": "Name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Console",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "78723dbc-769b-4a81-bbe6-b97c5bebaaf1",
+            "sourceColumn": "Console",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "94e8824f-0e7c-4d10-b32d-7f18a98e4b20",
+            "sourceColumn": "Year",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Gender",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "8a235224-ebe8-4906-bd46-5061c7c82287",
+            "sourceColumn": "Gender",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Region",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "04ec1eff-fe4e-41af-a7ce-ab957979716b",
+            "sourceColumn": "Region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Sales (Millions)",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "15a3f806-9317-4641-9904-781e42a9364b",
+            "sourceColumn": "Sales (Millions)",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "cdd122c8-8584-4a2a-9667-e5beda883caf",
+        "partitions": [
+          {
+            "name": "Video Games Sales-2c9ec42c-a745-4b90-b49b-113d98aebee0",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Origen = Excel.Workbook(File.Contents(\"C:\\Users\\Samue\\OneDrive - esumer.edu.co\\Repositorio_Github_DA\\data\\Ventas Videojuegos.xlsx\"), null, true),",
+                "    #\"Ventas Videojuegos_Sheet\" = Origen{[Item=\"Ventas Videojuegos\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Encabezados promovidos\" = Table.PromoteHeaders(#\"Ventas Videojuegos_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Tipo cambiado\" = Table.TransformColumnTypes(#\"Encabezados promovidos\",{{\"Nombre\", type text}, {\"Plataforma\", type any}, {\"Año\", Int64.Type}, {\"Genero\", type text}, {\"Editorial\", type text}, {\"Ventas NA\", type number}, {\"Ventas EU\", type number}, {\"Ventas JP\", type number}, {\"Ventas Otros\", type number}, {\"Ventas Global\", type number}}),",
+                "    #\"Columnas quitadas\" = Table.RemoveColumns(#\"Tipo cambiado\",{\"Ventas Global\"}),",
+                "    #\"Columna de anulación de dinamización\" = Table.UnpivotOtherColumns(#\"Columnas quitadas\", {\"Nombre\", \"Plataforma\", \"Año\", \"Genero\", \"Editorial\"}, \"Atributo\", \"Valor\"),",
+                "    #\"Columnas con nombre cambiado\" = Table.RenameColumns(#\"Columna de anulación de dinamización\",{{\"Atributo\", \"Región\"}, {\"Valor\", \"Ventas (Millones)\"}}),",
+                "    #\"Valor reemplazado\" = Table.ReplaceValue(#\"Columnas con nombre cambiado\",\"Ventas NA\",\"NorteAmérica\",Replacer.ReplaceText,{\"Región\"}),",
+                "    #\"Valor reemplazado1\" = Table.ReplaceValue(#\"Valor reemplazado\",\"Ventas EU\",\"Europa\",Replacer.ReplaceText,{\"Región\"}),",
+                "    #\"Valor reemplazado2\" = Table.ReplaceValue(#\"Valor reemplazado1\",\"Ventas JP\",\"Japón\",Replacer.ReplaceText,{\"Región\"}),",
+                "    #\"Valor reemplazado3\" = Table.ReplaceValue(#\"Valor reemplazado2\",\"Ventas Otros\",\"Otros\",Replacer.ReplaceText,{\"Región\"}),",
+                "    #\"Tipo cambiado1\" = Table.TransformColumnTypes(#\"Valor reemplazado3\",{{\"Año\", type text}}),",
+                "    #\"Valor reemplazado4\" = Table.ReplaceValue(#\"Tipo cambiado1\",\"NorteAmérica\",\"Norteamérica\",Replacer.ReplaceText,{\"Región\"}),",
+                "    Rename = Table.RenameColumns(#\"Valor reemplazado4\",{{\"Nombre\", \"Name\"}, {\"Plataforma\", \"Console\"}, {\"Año\", \"Year\"}, {\"Genero\", \"Gender\"}, {\"Región\", \"Region\"}, {\"Ventas (Millones)\", \"Sales (Millions)\"}}),",
+                "    ReplaceNorteAmerica = Table.ReplaceValue(Rename,\"Norteamérica\",\"North America\",Replacer.ReplaceText,{\"Region\"}),",
+                "    ReplaceEuropa = Table.ReplaceValue(ReplaceNorteAmerica, \"Europa\", \"Europe\", Replacer.ReplaceText, {\"Region\"}),",
+                "    ReplaceJapon = Table.ReplaceValue(ReplaceEuropa, \"Japón\", \"Japan\", Replacer.ReplaceText, {\"Region\"}),",
+                "    ReplaceOtros = Table.ReplaceValue(ReplaceJapon, \"Otros\", \"Others\", Replacer.ReplaceText, {\"Region\"})",
+                "    ",
+                "   ",
+                "in",
+                "    ReplaceOtros"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DateTableTemplate_edadf6c6-261f-4814-87ba-2b7a3e7daffe",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "703f3141-0ab1-4605-b4df-7e2f7f859d4f",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Año",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "b3262c29-cd7b-453c-a40e-2e41b0f85ece",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "NroMes",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "bc8891c6-0d27-4795-9708-0014717d4433",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Mes",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "f3b03117-abf3-41ef-a4bc-a8e6b8ef3b64",
+            "sortByColumn": "NroMes",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "NroTrimestre",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([NroMes] + 2) / 3)",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "b1662f7f-93b8-4f2b-8373-44d791349380",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Trimestre",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Trim. \" & [NroTrimestre]",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "cb718dc8-3326-4a79-be22-4b5d48a5c85f",
+            "sortByColumn": "NroTrimestre",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Día",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "522207f0-3cb0-4b17-9979-e4f7f0e9e353",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Jerarquía de fechas",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Año",
+                "column": "Año",
+                "lineageTag": "a6308131-1e95-43a0-a897-ec2a58e6b37c",
+                "ordinal": 0
+              },
+              {
+                "name": "Trimestre",
+                "column": "Trimestre",
+                "lineageTag": "d91b9e50-b225-4062-a71e-78b403d75e02",
+                "ordinal": 1
+              },
+              {
+                "name": "Mes",
+                "column": "Mes",
+                "lineageTag": "17893171-0366-4d0a-9573-413efb5e2fed",
+                "ordinal": 2
+              },
+              {
+                "name": "Día",
+                "column": "Día",
+                "lineageTag": "05d13ade-c44a-4c06-8442-af3492422a0e",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "52c7f8b5-c19a-4389-b2b4-7060c53d36ec"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "db2a8f83-0b27-443d-ad21-160fae0197db",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_edadf6c6-261f-4814-87ba-2b7a3e7daffe-aad2c077-706e-4657-b0cf-ddf2fc95efc9",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

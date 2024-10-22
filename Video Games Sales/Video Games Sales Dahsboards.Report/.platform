@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Video Games Sales Dahsboards"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3e9fa78b-f310-458f-bdc1-747397fc7b4b"
+  }
+}
