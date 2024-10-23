@@ -3,6 +3,6 @@
 ## Global Indicators
 ![alt text](<Global Indicators.png>)
 
-##Population by country
+## Population by country
 
 ![alt text](<Population by country.png>)
