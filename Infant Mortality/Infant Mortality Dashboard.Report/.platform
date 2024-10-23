@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Infant Mortality Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1b04ecc4-839d-4b46-8a36-570163b5cd4f"
+  }
+}

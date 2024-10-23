@@ -1,0 +1,805 @@
+{
+  "compatibilityLevel": 1567,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.137.952.0 (24.10)"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"Población\",\"Countries\",\"Paises\",\"Mortalidad Infantil\",\"Esperanza de Vida\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "es-MX",
+    "cultures": [
+      {
+        "name": "es-MX",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "relationships": [
+      {
+        "name": "9694ee84-2730-4933-b039-242ba5df97ed",
+        "crossFilteringBehavior": "bothDirections",
+        "fromCardinality": "one",
+        "fromColumn": "Country",
+        "fromTable": "Población",
+        "toColumn": "Country",
+        "toTable": "Countries"
+      },
+      {
+        "name": "d7865105-3a0e-46e0-999b-4a12118fb7e6",
+        "crossFilteringBehavior": "bothDirections",
+        "fromCardinality": "one",
+        "fromColumn": "Country Code",
+        "fromTable": "Countries",
+        "toColumn": "Country Code",
+        "toTable": "Paises"
+      },
+      {
+        "name": "f7975cbf-945c-44a3-aba9-76dcfac58253",
+        "crossFilteringBehavior": "bothDirections",
+        "fromCardinality": "one",
+        "fromColumn": "Country",
+        "fromTable": "Mortalidad Infantil",
+        "toColumn": "Country",
+        "toTable": "Countries"
+      },
+      {
+        "name": "748391ba-1fba-49b1-a10f-4902a79f8a0e",
+        "crossFilteringBehavior": "bothDirections",
+        "fromCardinality": "one",
+        "fromColumn": "Country",
+        "fromTable": "Esperanza de Vida",
+        "toColumn": "Country",
+        "toTable": "Countries"
+      }
+    ],
+    "sourceQueryCulture": "es-CO",
+    "tables": [
+      {
+        "name": "Población",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navegación"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "aa1528fb-619f-4618-aa78-5601be26802d",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Population",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "#,0",
+            "lineageTag": "f6d8f4cb-6c8d-47d5-8a2e-8d658e18fd19",
+            "sourceColumn": "Population",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Population Count",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "7070b504-9e88-4231-83c3-462b1c59541d",
+            "sourceColumn": "Population Count",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "b4159a22-4c84-484f-885b-070dff463def",
+        "partitions": [
+          {
+            "name": "Población-951485e7-2aa7-4fc6-8bc0-7371815efc74",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Origen = Excel.Workbook(File.Contents(\"C:\\Users\\Samue\\OneDrive - esumer.edu.co\\Repositorio_Github_DA\\data\\Reporte 1\\Population.xlsx\"), null, true),",
+                "    Population_Sheet = Origen{[Item=\"Population\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Encabezados promovidos\" = Table.PromoteHeaders(Population_Sheet, [PromoteAllScalars=true]),",
+                "    #\"Tipo cambiado\" = Table.TransformColumnTypes(#\"Encabezados promovidos\",{{\"Country\", type text}, {\"Population\", Int64.Type}}),",
+                "    #\"Columnas con nombre cambiado\" = Table.RenameColumns(#\"Tipo cambiado\",{{\"Population\", \"Población\"}}),",
+                "    #\"Columna condicional agregada\" = Table.AddColumn(#\"Columnas con nombre cambiado\", \"Cantidad Población\", each if [Población] <= 1000000 then \"0 - 1 M\" else if [Población] <= 10000000 then \"1 M-10 M\" else if [Población] <= 100000000 then \"10 M-100 M\" else \"100 M+\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Columna condicional agregada\",{{\"Población\", \"Population\"}, {\"Cantidad Población\", \"Population Count\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DateTableTemplate_4a7d85ff-c59e-42d9-b292-531da1d3d976",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "cd7b4c48-3e19-4cd9-9dc8-a0dac377f068",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Año",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "b801fab3-6592-43ea-9ac1-133ee72be9fe",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "NroMes",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "8dd58ce5-21fd-491e-9e1c-afc978c9c597",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Mes",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "0026db41-90ff-4b11-acf0-10def8494084",
+            "sortByColumn": "NroMes",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "NroTrimestre",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([NroMes] + 2) / 3)",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "2aa423ce-2837-4373-8ad2-cf20a28b9357",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Trimestre",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Trim. \" & [NroTrimestre]",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "e9f929d1-e3cf-4893-85b7-af92c85069cd",
+            "sortByColumn": "NroTrimestre",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Día",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "lineageTag": "c9f31e4c-036f-4f0f-8581-3d0eb2865d8a",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Jerarquía de fechas",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Año",
+                "column": "Año",
+                "lineageTag": "a98cd7d9-16e2-4f4b-b005-79667def8778",
+                "ordinal": 0
+              },
+              {
+                "name": "Trimestre",
+                "column": "Trimestre",
+                "lineageTag": "42a06509-8fbf-4447-a14a-333bb852720f",
+                "ordinal": 1
+              },
+              {
+                "name": "Mes",
+                "column": "Mes",
+                "lineageTag": "f06b078f-3921-4435-be7d-e400aa45919f",
+                "ordinal": 2
+              },
+              {
+                "name": "Día",
+                "column": "Día",
+                "lineageTag": "fccfba1e-36c6-48d6-bbbb-549e205acffa",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "04a11cb1-9747-414c-926e-842fb09b8f7f"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "19944875-4cf3-4a53-ac64-208198c28dad",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_4a7d85ff-c59e-42d9-b292-531da1d3d976-d0825aef-cd85-4fab-af24-f1f62a9628f4",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Countries",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navegación"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Country Code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "b2b81931-c309-4fe2-b964-56c897dfd8b4",
+            "sourceColumn": "Country Code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "ed281f19-dd69-4b36-a5e6-54870dd7947a",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Continent",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "fd17d8aa-5e76-432e-b769-eb46daf31dd0",
+            "sourceColumn": "Continent",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "29123fd9-d470-41bc-9b4d-f855cce7c0b7",
+        "partitions": [
+          {
+            "name": "Countries-c9674b9e-81d9-4664-a954-006c8739a903",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Origen = Excel.Workbook(File.Contents(\"C:\\Users\\Samue\\OneDrive - esumer.edu.co\\Repositorio_Github_DA\\data\\Reporte 1\\Countries.xlsx\"), null, true),",
+                "    Countries_Sheet = Origen{[Item=\"Countries\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Tipo cambiado\" = Table.TransformColumnTypes(Countries_Sheet,{{\"Column1\", type text}, {\"Column2\", type text}, {\"Column3\", type text}}),",
+                "    #\"Encabezados promovidos\" = Table.PromoteHeaders(#\"Tipo cambiado\", [PromoteAllScalars=true]),",
+                "    #\"Tipo cambiado1\" = Table.TransformColumnTypes(#\"Encabezados promovidos\",{{\"Country Code\", type text}, {\"Country\", type text}, {\"Continent\", type text}})",
+                "in",
+                "    #\"Tipo cambiado1\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Paises",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navegación"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Country Code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "95563f44-7050-43ce-85bd-cefeefb4c190",
+            "sourceColumn": "Country Code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataCategory": "Country",
+            "dataType": "string",
+            "lineageTag": "55e631db-b8bf-490d-9979-33ff64d99316",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Continent",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataCategory": "Continent",
+            "dataType": "string",
+            "lineageTag": "374c7f30-ffa1-46dd-a21d-8bc2393ae963",
+            "sourceColumn": "Continent",
+            "summarizeBy": "none"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Jerarquia cont-pais",
+            "levels": [
+              {
+                "name": "Continent",
+                "column": "Continent",
+                "lineageTag": "c501da67-46b0-4c6f-877b-46248f245754",
+                "ordinal": 0
+              },
+              {
+                "name": "Country",
+                "column": "Country",
+                "lineageTag": "351a6bbe-805a-40b6-ae93-8fdfc0ec167b",
+                "ordinal": 1
+              }
+            ],
+            "lineageTag": "32451b98-ed60-44ec-9b52-5940f9462719"
+          }
+        ],
+        "lineageTag": "a6c3e8e4-881f-4751-bde5-ade7ef0c3faa",
+        "partitions": [
+          {
+            "name": "Paises-62694704-c191-4374-968e-f9e3885fd712",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Origen = Excel.Workbook(File.Contents(\"C:\\Users\\Samue\\OneDrive - esumer.edu.co\\Repositorio_Github_DA\\data\\Reporte 1\\Paises.xlsx\"), null, true),",
+                "    Paises_Sheet = Origen{[Item=\"Paises\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Tipo cambiado\" = Table.TransformColumnTypes(Paises_Sheet,{{\"Column1\", type text}, {\"Column2\", type text}, {\"Column3\", type text}}),",
+                "    #\"Encabezados promovidos\" = Table.PromoteHeaders(#\"Tipo cambiado\", [PromoteAllScalars=true]),",
+                "    #\"Tipo cambiado1\" = Table.TransformColumnTypes(#\"Encabezados promovidos\",{{\"Codigo Pais\", type text}, {\"Pais\", type text}, {\"Continente\", type text}}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Tipo cambiado1\",{{\"Codigo Pais\", \"Country Code\"}, {\"Pais\", \"Country\"}, {\"Continente\", \"Continent\"}}),",
+                "    ReplacedValue = Table.ReplaceValue(#\"Renamed Columns\",\"África\",\"Africa\",Replacer.ReplaceText,{\"Continent\"}),",
+                "    ReplacedValue2 = Table.ReplaceValue(ReplacedValue,\"Europa\",\"Europe\",Replacer.ReplaceText,{\"Continent\"}),",
+                "    ReplacedValue3 = Table.ReplaceValue(ReplacedValue2,\"América\",\"America\",Replacer.ReplaceText,{\"Continent\"})",
+                "in",
+                "    ReplacedValue3"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Mortalidad Infantil",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navegación"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "39b4f36c-607c-4693-ace0-a950492786a8",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Infant Mortality",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "885b9ff6-5c7c-497f-80e1-8eed29344d39",
+            "sourceColumn": "Infant Mortality",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Infant Mortality (Deaths per 1,000 children)",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "061809b3-ff61-4c9f-88c0-e147f3ba4acf",
+            "sourceColumn": "Infant Mortality (Deaths per 1,000 children)",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "e89817cd-ec6f-4513-a095-213e3c465016",
+        "partitions": [
+          {
+            "name": "Mortalidad Infantil-44a7e00e-934a-4bf3-a7a7-560c44be3473",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Origen = Excel.Workbook(File.Contents(\"C:\\Users\\Samue\\OneDrive - esumer.edu.co\\Repositorio_Github_DA\\data\\Reporte 2\\Infant death rate.xlsx\"), null, true),",
+                "    #\"Infant death rate_Sheet\" = Origen{[Item=\"Infant death rate\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Encabezados promovidos\" = Table.PromoteHeaders(#\"Infant death rate_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Tipo cambiado\" = Table.TransformColumnTypes(#\"Encabezados promovidos\",{{\"Country\", type text}, {\"Infant mortality\", type number}}),",
+                "    #\"Columnas con nombre cambiado\" = Table.RenameColumns(#\"Tipo cambiado\",{{\"Infant mortality\", \"Mortalidad Infantil\"}, {\"Country\", \"Pais\"}}),",
+                "    #\"Columna condicional agregada\" = Table.AddColumn(#\"Columnas con nombre cambiado\", \"Mortalidad Infantil (Muertes por cada 1000 niños)\", each if [Mortalidad Infantil] <= 10 then \"0 a 10\" else if [Mortalidad Infantil] <= 25 then \"10 a 25\" else if [Mortalidad Infantil] <= 50 then \"25 a 50\" else \"50 o más\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Columna condicional agregada\",{{\"Pais\", \"Country\"}, {\"Mortalidad Infantil\", \"Infant Mortality\"}, {\"Mortalidad Infantil (Muertes por cada 1000 niños)\", \"Infant Mortality (Deaths per 1,000 children)\"}}),",
+                "    #\"Replaced Value\" = Table.ReplaceValue(#\"Renamed Columns\",\"50 o más\",\"50 or more\",Replacer.ReplaceText,{\"Infant Mortality (Deaths per 1,000 children)\"})",
+                "in",
+                "    #\"Replaced Value\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Esperanza de Vida",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navegación"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "bb0e3135-2641-475c-804d-d37a7498d787",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Life Expectancy",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "2ad2921e-36aa-466e-acee-4cb4b724aceb",
+            "sourceColumn": "Life Expectancy",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Life Expectancy (average years of life)",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isText\":true}"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b107efb4-613b-4c1a-87d8-f80009405b36",
+            "sourceColumn": "Life Expectancy (average years of life)",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "2837390e-d053-4387-8641-dfe464fc71b6",
+        "partitions": [
+          {
+            "name": "Esperanza de Vida-856b5513-bcce-43d2-a309-335a11cb82e2",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Origen = Excel.Workbook(File.Contents(\"C:\\Users\\Samue\\OneDrive - esumer.edu.co\\Repositorio_Github_DA\\data\\Reporte 2\\Life expectancy.xlsx\"), null, true),",
+                "    #\"Life expectancy_Sheet\" = Origen{[Item=\"Life expectancy\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Encabezados promovidos\" = Table.PromoteHeaders(#\"Life expectancy_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Tipo cambiado\" = Table.TransformColumnTypes(#\"Encabezados promovidos\",{{\"Country\", type text}, {\"Life Expectancy\", type number}}),",
+                "    #\"Columnas con nombre cambiado\" = Table.RenameColumns(#\"Tipo cambiado\",{{\"Country\", \"País\"}, {\"Life Expectancy\", \"Esperanza de vida\"}}),",
+                "    #\"Columna condicional agregada\" = Table.AddColumn(#\"Columnas con nombre cambiado\", \"Esperanza de Vida (años promedio de vida)\", each if [Esperanza de vida] <= 60 then \"0 a 60\" else if [Esperanza de vida] <= 70 then \"60 a 70\" else if [Esperanza de vida] <= 80 then \"70 a 80\" else \"80 o más\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Columna condicional agregada\",{{\"País\", \"Country\"}, {\"Esperanza de vida\", \"Life Expectancy\"}, {\"Esperanza de Vida (años promedio de vida)\", \"Life Expectancy (average years of life)\"}}),",
+                "    #\"Replaced Value\" = Table.ReplaceValue(#\"Renamed Columns\",\"80 o más\",\"80 or more\",Replacer.ReplaceText,{\"Life Expectancy (average years of life)\"})",
+                "in",
+                "    #\"Replaced Value\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
