@@ -1,7 +1,7 @@
 # Infant mortality by region and countries
 
 ## Global Indicators
-[alt text](<Global Indicators.png>)
+![alt text](<Global Indicators.png>)
 
 ##Population by country
 
